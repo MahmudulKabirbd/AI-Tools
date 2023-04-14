@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block head%}
+<title> Blog Section of my Website</title>
+{%endblock head%}
+{% block content %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for post in posts %}
+    <div class="col">
+      <div class="card h-100">
+        <img src="{{post.featured.url}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title"><a href="{%url 'single_post' post.slug %}"class="text-decoration-none text-danger"> {{post.title}}</a></h5>
+          <p class="card-text">{{post.content|truncatewords:30}}</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">Last updated {{post.update|timesince}} ago</small>
+        </div>
+      </div>
+    </div>
+    {%endfor%}
+    
+    
+  </div>
+  <!--Pagination-->>
+  <nav aria-label="Page navigation example" class="my-3">
+    <ul class="pagination justify-content-center">
+        {% if posts.has_previous %}
+
+      <li class="page-item">
+        <a class="page-link" href="?page=previous={{posts.previous_page_number}}" tabindex="-1">Previous</a>
+      </li>
+      {%else%}
+      <li class="page-item disabled">
+        <a class="page-link">Previous</a>
+      </li>
+      {%endif%}
+
+      {% for i in posts.paginator.page_range %}
+      {% if posts.number == 1 %}
+      <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+      {%else%}
+      <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+      {% endif %}
+      {% endfor %}
+      
+      {% if posts.has_next %} 
+      <li class="page-item">
+        <a class="page-link" href="?page={{posts.next_page_number}}">Next</a></li>
+      {%else%}
+      <li class="page-item disabled">
+        <a class="page-link">Next</a> 
+      </li>
+      {%endif%}
+      
+    </ul>
+  </nav>
+
+{% endblock content %}
